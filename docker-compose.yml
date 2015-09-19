@@ -1,0 +1,19 @@
+registry:
+  restart: always
+  image: registry:2
+  ports:
+    - 5000:5000
+  environment:
+    REGISTRY_AUTH: htpasswd
+    REGISTRY_HTTP_TLS_CERTIFICATE: /certs/bundle.crt
+    REGISTRY_HTTP_TLS_KEY: /private/astromo_io.key
+    REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+    REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+    REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+  volumes:
+    - ./auth:/auth
+    - ./data:/var/lib/registry
+    #- ./config.yml:/etc/docker/registry/config.yml
+    # These SSL certificates must be present on the host
+    - /etc/ssl/astromo/private:/private:ro
+    - /etc/ssl/astromo/certs:/certs:ro
